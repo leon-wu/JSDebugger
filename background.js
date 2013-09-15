@@ -12,12 +12,10 @@ var debug = false;
 var rules = [];
 var requestFilter = {
     urls: [
-        "http://*/*", "https://*/*"
+        "<all_urls>"
     ]
 };
 
-//http://www.google-analytics.com/ga.js
-//https://ssl.gstatic.com/gb/js/smm_a326b17e3242115785460b9666dd0014.js
 chrome.webRequest.onBeforeRequest.addListener(function (details) {
     if (timestamp !== localStorage[JS_DEBUG_TIMESTAMP]) {
         timestamp = localStorage[JS_DEBUG_TIMESTAMP];
@@ -27,10 +25,16 @@ chrome.webRequest.onBeforeRequest.addListener(function (details) {
     if (debug) {
         var u = details.url;
 
-        rules.forEach(function (rule) {
+        var matchedRule;
+        rules.forEach(function(rule) {
             if (u.indexOf(rule.source) == 0) {
-                return {redirectUrl: rule.destination};
+                matchedRule = rule;
             }
         });
+
+        if (typeof(matchedRule) === "object") {
+            console.log('intercepted %s with %s', u, matchedRule.destination);
+            return {redirectUrl: matchedRule.destination};
+        }
     }
 }, requestFilter, ['blocking']);

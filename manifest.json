@@ -9,6 +9,6 @@
     "description": "Replace compress/minify JS files with any file .",
     "manifest_version": 2,
     "name": "JavaScript Debugger",
-    "permissions": [ "http://*/*", "https://*/*", "webRequest", "webRequestBlocking"],
+    "permissions": [ "<all_urls>", "webRequest", "webRequestBlocking"],
     "version": "0.1"
 }
